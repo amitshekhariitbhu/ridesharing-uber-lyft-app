@@ -6,10 +6,10 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -31,6 +31,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, WebSocketListener 
 
     private lateinit var mMap: GoogleMap
     private lateinit var webSocket: WebSocket
+    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
+    private lateinit var locationCallback: LocationCallback
     private var currentLatLng: LatLng? = null
     private val nearbyCabMarkerList = arrayListOf<Marker>()
 
@@ -94,30 +96,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, WebSocketListener 
     }
 
     private fun setUpLocationListener() {
-        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationProviderClient = FusedLocationProviderClient(this)
         // for getting the current location update after every 2 seconds
         val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    super.onLocationResult(locationResult)
-                    if (currentLatLng == null) {
-                        for (location in locationResult.locations) {
-                            if (currentLatLng == null) {
-                                currentLatLng = LatLng(location.latitude, location.longitude)
-                                enableMyLocationOnMap()
-                                moveCamera(currentLatLng)
-                                animateCamera(currentLatLng)
-                                requestNearbyCabs()
-                            }
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                if (currentLatLng == null) {
+                    for (location in locationResult.locations) {
+                        if (currentLatLng == null) {
+                            currentLatLng = LatLng(location.latitude, location.longitude)
+                            enableMyLocationOnMap()
+                            moveCamera(currentLatLng)
+                            animateCamera(currentLatLng)
+                            requestNearbyCabs()
                         }
                     }
-                    // Few more things we can do here:
-                    // For example: Update the location of user on server
                 }
-            },
+                // Few more things we can do here:
+                // For example: Update the location of user on server
+            }
+        }
+        fusedLocationProviderClient?.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
             Looper.myLooper()
         )
     }
@@ -148,6 +151,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, WebSocketListener 
 
     override fun onDestroy() {
         webSocket.disconnect()
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
         super.onDestroy()
     }
 
