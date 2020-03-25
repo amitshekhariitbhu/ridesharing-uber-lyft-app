@@ -11,6 +11,9 @@
 
 # This project is under development. Stay-tuned for Updates.
 
+## This App uses the Google API Key for Maps, Directions and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project and put that in the local.properties
+```apiKey=YOUR_API_KEY```
+
 ## We will build and learn the following for the App like Uber and Lyft:
 * Create Rider Android App
 * Fetch and show nearby cabs on Google Map
