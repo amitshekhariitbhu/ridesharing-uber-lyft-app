@@ -26,10 +26,7 @@ object Simulator {
 
     fun getFakeNearbyCabLocations(latitude: Double, longitude: Double): ArrayList<LatLng> {
         nearbyCabLocations.clear()
-        currentLocation = LatLng(
-            latitude,
-            longitude
-        )
+        currentLocation = LatLng(latitude, longitude)
         val size = (4..6).random()
 
         for (i in 1..size) {
@@ -45,12 +42,7 @@ object Simulator {
             }
             val randomLatitude = (latitude + randomDeltaForLat).coerceAtMost(90.00)
             val randomLongitude = (longitude + randomDeltaForLng).coerceAtMost(180.00)
-            nearbyCabLocations.add(
-                LatLng(
-                    randomLatitude,
-                    randomLongitude
-                )
-            )
+            nearbyCabLocations.add(LatLng(randomLatitude, randomLongitude))
         }
         return nearbyCabLocations
     }
@@ -92,24 +84,33 @@ object Simulator {
                 pickUpPath.clear()
                 val routeList = result.routes
                 // Actually it will have zero or 1 route as we haven't asked Google API for multiple paths
-                for (route in routeList) {
-                    val path = route.overviewPolyline.decodePath()
-                    pickUpPath.addAll(path)
+
+                if (routeList.isEmpty()) {
+                    val jsonObjectFailure = JSONObject()
+                    jsonObjectFailure.put("type", "routesNotAvailable")
+                    webSocketListener.onError(jsonObjectFailure.toString())
+                } else {
+                    for (route in routeList) {
+                        val path = route.overviewPolyline.decodePath()
+                        pickUpPath.addAll(path)
+                    }
+
+                    val jsonObject = JSONObject()
+                    jsonObject.put("type", "pickUpPath")
+                    val jsonArray = JSONArray()
+                    for (pickUp in pickUpPath) {
+                        val jsonObjectLatLng = JSONObject()
+                        jsonObjectLatLng.put("lat", pickUp.lat)
+                        jsonObjectLatLng.put("lng", pickUp.lng)
+                        jsonArray.put(jsonObjectLatLng)
+                    }
+                    jsonObject.put("path", jsonArray)
+                    webSocketListener.onMessage(jsonObject.toString())
+
+                    startTimerForPickUp(webSocketListener)
                 }
 
-                val jsonObject = JSONObject()
-                jsonObject.put("type", "pickUpPath")
-                val jsonArray = JSONArray()
-                for (pickUp in pickUpPath) {
-                    val jsonObjectLatLng = JSONObject()
-                    jsonObjectLatLng.put("lat", pickUp.lat)
-                    jsonObjectLatLng.put("lng", pickUp.lng)
-                    jsonArray.put(jsonObjectLatLng)
-                }
-                jsonObject.put("path", jsonArray)
-                webSocketListener.onMessage(jsonObject.toString())
 
-                startTimerForPickUp(webSocketListener)
             }
 
             override fun onFailure(e: Throwable) {
@@ -172,12 +173,19 @@ object Simulator {
                         tripPath.clear()
                         val routeList = result.routes
                         // Actually it will have zero or 1 route as we haven't asked Google API for multiple paths
-                        for (route in routeList) {
-                            val path = route.overviewPolyline.decodePath()
-                            tripPath.addAll(path)
+
+                        if (routeList.isEmpty()) {
+                            val jsonObjectFailure = JSONObject()
+                            jsonObjectFailure.put("type", "routesNotAvailable")
+                            webSocketListener.onError(jsonObjectFailure.toString())
+                        } else {
+                            for (route in routeList) {
+                                val path = route.overviewPolyline.decodePath()
+                                tripPath.addAll(path)
+                            }
+                            startTimerForTrip(webSocketListener)
                         }
 
-                        startTimerForTrip(webSocketListener)
                     }
 
                     override fun onFailure(e: Throwable) {
