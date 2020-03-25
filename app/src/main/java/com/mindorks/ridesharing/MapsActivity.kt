@@ -105,11 +105,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, WebSocketListener 
                     super.onLocationResult(locationResult)
                     if (currentLatLng == null) {
                         for (location in locationResult.locations) {
-                            currentLatLng = LatLng(location.latitude, location.longitude)
-                            enableMyLocationOnMap()
-                            moveCamera(currentLatLng)
-                            animateCamera(currentLatLng)
-                            requestNearbyCabs()
+                            if (currentLatLng == null) {
+                                currentLatLng = LatLng(location.latitude, location.longitude)
+                                enableMyLocationOnMap()
+                                moveCamera(currentLatLng)
+                                animateCamera(currentLatLng)
+                                requestNearbyCabs()
+                            }
                         }
                     }
                     // Few more things we can do here:
