@@ -32,8 +32,8 @@ object Simulator {
         for (i in 1..size) {
             val randomOperatorForLat = (0..1).random()
             val randomOperatorForLng = (0..1).random()
-            var randomDeltaForLat = (5..30).random() / 10000.00
-            var randomDeltaForLng = (5..30).random() / 10000.00
+            var randomDeltaForLat = (10..50).random() / 10000.00
+            var randomDeltaForLng = (10..50).random() / 10000.00
             if (randomOperatorForLat == 1) {
                 randomDeltaForLat *= -1
             }
