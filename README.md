@@ -1,4 +1,6 @@
-# Ride-Sharing Uber Lyft Android App - Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By MindOrks
+# Ride-Sharing Uber Lyft Android App
+## Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By MindOrks
+
 [![MindOrks](https://img.shields.io/badge/mindorks-opensource-blue.svg)](https://mindorks.com/open-source-projects)
 [![MindOrks Community](https://img.shields.io/badge/join-community-blue.svg)](https://mindorks.com/join-community)
 
@@ -7,7 +9,7 @@
 </p>
 <br>
 
-# This project is under development. Stay Tuned for Updates.
+# This project is under development. Stay-tuned for Updates.
 
 ## We will build and learn the following for the App like Uber and Lyft:
 * Create Rider Android App
@@ -22,7 +24,7 @@
 
 ## We have simulated the backend environment for you to get the real-work like experience.
 
-## : Explore Android Online Tutorials and Courses by MindOrks
+## Explore Android Online Tutorials and Courses by MindOrks
 * [Android Tutorial](https://mindorks.com/android-tutorial) - All Free Android Tutorials by MindOrks
 * [Android Online Course for Professionals](https://bootcamp.mindorks.com) - In this online course, you’ll learn best practices for Android and mobile development. By the end of the online course, you will have the skills you need to become a professional Android Developer.
 * [Android Online Course for Beginners](https://bootcamp.mindorks.com/android-training-for-beginners) - This course is for beginners.
