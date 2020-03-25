@@ -1,2 +1,3 @@
 rootProject.name='ridesharing-uber-lyft-app'
 include ':app'
+include ':simulator'
