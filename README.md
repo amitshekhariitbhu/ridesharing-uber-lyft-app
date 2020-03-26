@@ -25,6 +25,7 @@ This App uses the Google API Key for Maps, Directions and Places. Get the API ke
 * On-going trip UI
 * Trip End
 * Animation like Uber App for Car
+* This project uses the basic MVP Architecture
 
 ## We have simulated the backend environment for you to get the real-work like experience.
 
