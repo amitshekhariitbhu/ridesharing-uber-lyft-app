@@ -1,5 +1,7 @@
 package com.mindorks.ridesharing.simulator
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.google.maps.DirectionsApiRequest
 import com.google.maps.GeoApiContext
@@ -23,8 +25,13 @@ object Simulator {
     private var nearbyCabLocations = arrayListOf<LatLng>()
     private var pickUpPath = arrayListOf<LatLng>()
     private var tripPath = arrayListOf<LatLng>()
+    private val mainThread = Handler(Looper.getMainLooper())
 
-    fun getFakeNearbyCabLocations(latitude: Double, longitude: Double): ArrayList<LatLng> {
+    fun getFakeNearbyCabLocations(
+        latitude: Double,
+        longitude: Double,
+        webSocketListener: WebSocketListener
+    ) {
         nearbyCabLocations.clear()
         currentLocation = LatLng(latitude, longitude)
         val size = (4..6).random()
@@ -44,7 +51,20 @@ object Simulator {
             val randomLongitude = (longitude + randomDeltaForLng).coerceAtMost(180.00)
             nearbyCabLocations.add(LatLng(randomLatitude, randomLongitude))
         }
-        return nearbyCabLocations
+
+        val jsonObjectToPush = JSONObject()
+        jsonObjectToPush.put("type", "nearByCabs")
+        val jsonArray = JSONArray()
+        for (location in nearbyCabLocations) {
+            val jsonObjectLatLng = JSONObject()
+            jsonObjectLatLng.put("lat", location.lat)
+            jsonObjectLatLng.put("lng", location.lng)
+            jsonArray.put(jsonObjectLatLng)
+        }
+        jsonObjectToPush.put("locations", jsonArray)
+        mainThread.post {
+            webSocketListener.onMessage(jsonObjectToPush.toString())
+        }
     }
 
     fun requestCab(
@@ -80,7 +100,9 @@ object Simulator {
                 Log.d(TAG, "onResult : $result")
                 val jsonObjectCabBooked = JSONObject()
                 jsonObjectCabBooked.put("type", "cabBooked")
-                webSocketListener.onMessage(jsonObjectCabBooked.toString())
+                mainThread.post {
+                    webSocketListener.onMessage(jsonObjectCabBooked.toString())
+                }
                 pickUpPath.clear()
                 val routeList = result.routes
                 // Actually it will have zero or 1 route as we haven't asked Google API for multiple paths
@@ -105,7 +127,9 @@ object Simulator {
                         jsonArray.put(jsonObjectLatLng)
                     }
                     jsonObject.put("path", jsonArray)
-                    webSocketListener.onMessage(jsonObject.toString())
+                    mainThread.post {
+                        webSocketListener.onMessage(jsonObject.toString())
+                    }
 
                     startTimerForPickUp(webSocketListener)
                 }
@@ -135,13 +159,17 @@ object Simulator {
                 jsonObject.put("type", "location")
                 jsonObject.put("lat", pickUpPath[index].lat)
                 jsonObject.put("lng", pickUpPath[index].lng)
-                webSocketListener.onMessage(jsonObject.toString())
+                mainThread.post {
+                    webSocketListener.onMessage(jsonObject.toString())
+                }
 
                 if (index == size - 1) {
                     stopTimer()
                     val jsonObjectCabIsArriving = JSONObject()
                     jsonObjectCabIsArriving.put("type", "cabIsArriving")
-                    webSocketListener.onMessage(jsonObjectCabIsArriving.toString())
+                    mainThread.post {
+                        webSocketListener.onMessage(jsonObjectCabIsArriving.toString())
+                    }
                     startTimerForWaitDuringPickUp(webSocketListener)
                 }
 
@@ -161,7 +189,9 @@ object Simulator {
                 stopTimer()
                 val jsonObjectCabArrived = JSONObject()
                 jsonObjectCabArrived.put("type", "cabArrived")
-                webSocketListener.onMessage(jsonObjectCabArrived.toString())
+                mainThread.post {
+                    webSocketListener.onMessage(jsonObjectCabArrived.toString())
+                }
                 val directionsApiRequest = DirectionsApiRequest(geoApiContext)
                 directionsApiRequest.mode(TravelMode.DRIVING)
                 directionsApiRequest.origin(pickUpLocation)
@@ -214,7 +244,9 @@ object Simulator {
                 if (index == 0) {
                     val jsonObjectTripStart = JSONObject()
                     jsonObjectTripStart.put("type", "tripStart")
-                    webSocketListener.onMessage(jsonObjectTripStart.toString())
+                    mainThread.post {
+                        webSocketListener.onMessage(jsonObjectTripStart.toString())
+                    }
 
                     val jsonObject = JSONObject()
                     jsonObject.put("type", "tripPath")
@@ -226,14 +258,18 @@ object Simulator {
                         jsonArray.put(jsonObjectLatLng)
                     }
                     jsonObject.put("path", jsonArray)
-                    webSocketListener.onMessage(jsonObject.toString())
+                    mainThread.post {
+                        webSocketListener.onMessage(jsonObject.toString())
+                    }
                 }
 
                 val jsonObject = JSONObject()
                 jsonObject.put("type", "location")
                 jsonObject.put("lat", tripPath[index].lat)
                 jsonObject.put("lng", tripPath[index].lng)
-                webSocketListener.onMessage(jsonObject.toString())
+                mainThread.post {
+                    webSocketListener.onMessage(jsonObject.toString())
+                }
 
                 if (index == size - 1) {
                     stopTimer()
@@ -255,7 +291,9 @@ object Simulator {
                 stopTimer()
                 val jsonObjectTripEnd = JSONObject()
                 jsonObjectTripEnd.put("type", "tripEnd")
-                webSocketListener.onMessage(jsonObjectTripEnd.toString())
+                mainThread.post {
+                    webSocketListener.onMessage(jsonObjectTripEnd.toString())
+                }
             }
         }
         timer?.schedule(timerTask, delay, period)
