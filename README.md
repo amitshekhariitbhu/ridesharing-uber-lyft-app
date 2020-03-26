@@ -1,5 +1,5 @@
 # Ride-Sharing Uber Lyft Android App
-Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By MindOrks
+Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project By MindOrks
 
 [![MindOrks](https://img.shields.io/badge/mindorks-opensource-blue.svg)](https://mindorks.com/open-source-projects)
 [![MindOrks Community](https://img.shields.io/badge/join-community-blue.svg)](https://mindorks.com/join-community)
@@ -8,8 +8,6 @@ Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By
     <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/banner-ridesharing-uber-lyft-app.jpg">
 </p>
 <br>
-
-# This project is under development. Stay-tuned for Updates.
 
 ## Building the project
 * Every feature is done in a different branch so that it will be easy to follow.
@@ -21,12 +19,23 @@ Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By
    * Start with the `base-project` branch
    * Setup project with basic MVP Architecture.
    * Implement Permission for fetching current location.
-   * Implement Nearby cabs feature.
+   * Implement feature - nearby cabs.
    * Use WebSocket present in simulator module to fetch nearby cabs.
    * Match your solution with `nearby-cabs` branch.
-   * Implement pickup and drop location.
+   * Implement feature - pickup and drop location.
    * Match your solution with `pickup-drop-location` branch.
-   * And so on.
+   * Implement feature - book a cab.
+   * Implement feature - Show pickup path on map with Animation.
+   * Implement feature - Show current drive location during pickup.
+   * Implement feature - Cab is arriving and arrived.
+   * Implement feature - Car Animation like Uber.
+   * Implement feature - Show trip path on map with Animation.
+   * Implement feature - Trip Starts.
+   * Implement feature - Show current drive location during trip.
+   * Implement feature - Trip on-going.
+   * Implement feature - Trip Ends.
+   * Implement feature - Implement Take Next Ride.
+   * Match your solution with `book-complete-trip` branch.
 
 ## We will build and learn the following for the App like Uber and Lyft:
 * Create Rider Android App
@@ -43,13 +52,20 @@ Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By
 
 ## We have simulated the backend environment for you to get the real-work like experience.
 
-## Screenshots for reference
+## Real screenshots from this project
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/nearby-cabs.png" width="200">
   <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/pickup-drop-location.png" width="200">
   <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/pickup-drop-location-both-filled.png" width="200">
   <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/request-cab-button.png" width="200">
+</p>
+<br>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/cab-is-booked.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/cab-is-arriving.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/on-trip.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/trip-end.png" width="200">
 </p>
 
 ## Explore Android Online Tutorials and Courses by MindOrks
