@@ -43,8 +43,8 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 
 ## Building the project
 * Every feature is done in a different branch so that it will be easy to follow.
-* Clone the project, the `master` branch have the latest code.
-* To learn and implement from beginning, switch the branch to `base-project`
+* Clone the project, the `master` branch has the latest code.
+* To learn and implement from the beginning, switch the branch to `base-project`
 * This App uses the Google API Key for Maps, Directions, and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project and put that in the local.properties:
 ```apiKey=YOUR_API_KEY```. Refer this [link](https://developers.google.com/maps/documentation/directions/get-api-key).
 * Start implementing features:
@@ -63,7 +63,7 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
    * Implement feature - Car Animation like Uber.
    * Implement feature - Show trip path on the map with Animation.
    * Implement feature - Trip Starts.
-   * Implement feature - Show the current driver location during trip.
+   * Implement feature - Show the current driver location during the trip.
    * Implement feature - Trip on-going.
    * Implement feature - Trip Ends.
    * Implement feature - Implement Take Next Ride.
@@ -73,6 +73,153 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 * [Android Tutorial](https://mindorks.com/android-tutorial) - All Free Android Tutorials by MindOrks
 * [Android Online Course for Professionals](https://bootcamp.mindorks.com) - In this online course, you’ll learn best practices for Android and mobile development. By the end of the online course, you will have the skills you need to become a professional Android Developer.
 * [Android Online Course for Beginners](https://bootcamp.mindorks.com/android-training-for-beginners) - This course is for beginners.
+
+## WebSocket API Reference for this project
+
+* In WebSocket, we have three methods:
+   * `connect()`: To connect with the server
+   * `sendMessage(data: String)`: To send the data to the server
+   * `disconnect()`: To disconnect from the server
+
+* In WebSocketListener, we have four callbacks:
+   * `onConnect()`: Called when it is connected with the server
+   * `onMessage(data: String)`: Called when an event comes from the server
+   * `fun onDisconnect()`: Called when the client is disconnected from the server
+   * `fun onError(error: String)`:  Called when the error occurred on the server
+
+* Client sending event to server using `webSocket.sendMessage(data)`:
+    * Request for nearby cabs from server
+    ```json
+    {
+      "type": "nearByCabs",
+      "lat": 28.438147,
+      "lng": 77.0994446
+    }
+    ``` 
+   * Request a cab from server
+    ```json
+    {
+      "type": "requestCab",
+      "pickUpLat": 28.4369353,
+      "pickUpLng": 77.1125599,
+      "dropLat": -25.274398,
+      "dropLng": 133.775136
+    }
+    ```
+  
+* The Server sending success event to the client received in `onMessage(data: String)`:
+   * NearBy cabs 
+    ```json
+    {
+      "type": "nearByCabs",
+      "locations": [
+        {
+          "lat": 28.439147000000002,
+          "lng": 77.0944446
+        },
+        {
+          "lat": 28.433147,
+          "lng": 77.0952446
+        },
+        {
+          "lat": 28.440547000000002,
+          "lng": 77.1026446
+        }
+      ]
+    }
+    ```
+   * Cab Booked
+    ```json
+    {
+      "type": "cabBooked"
+    }
+    ```  
+   * PickUp Path
+    ```json
+    {
+      "type": "pickUpPath",
+      "path": [
+        {
+          "lat": 28.43578,
+          "lng": 77.10198000000001
+        },
+        {
+          "lat": 28.43614,
+          "lng": 77.10164
+        },
+        {
+          "lat": 28.436400000000003,
+          "lng": 77.10149000000001
+        }
+      ]
+    }
+    ```   
+   * Cab Current Location during pickup or trip
+    ```json
+    {
+      "type": "location",
+      "lat": 28.43578,
+      "lng": 77.10198000000001
+    }
+    ```  
+   * Cab is Arriving
+    ```json
+    {
+      "type": "cabIsArriving"
+    }
+    ```    
+   * Cab Arrived
+    ```json
+    {
+      "type": "cabArrived"
+    }
+    ```    
+   * Trip Start
+    ```json
+    {
+      "type": "tripStart"
+    }
+    ```       
+   * Trip Path
+    ```json
+    {
+      "type": "tripPath",
+      "path": [
+        {
+          "lat": 28.438370000000003,
+          "lng": 77.09944
+        },
+        {
+          "lat": 28.438450000000003,
+          "lng": 77.1006
+        },
+        {
+          "lat": 28.438480000000002,
+          "lng": 77.10095000000001
+        }
+      ]
+    }
+    ``` 
+   * Trip End
+    ```json
+    {
+      "type": "tripEnd"
+    }
+    ```          
+* The server sending the error event to the client received in `onError(error: String)`:
+   * Direction API Failed
+    ```json
+    {
+      "type": "directionApiFailed",
+      "error": "Unable to resolve host \"maps.googleapis.com\": No address associated with hostname"
+    }
+    ```
+   * Routes Not Available
+    ```json
+    {
+      "type": "routesNotAvailable"
+    }
+    ```  
 
 ### Find this project useful ? :heart:
 
