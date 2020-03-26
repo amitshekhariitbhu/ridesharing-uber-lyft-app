@@ -1,5 +1,5 @@
 # Ride-Sharing Uber Lyft Android App
-## Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By MindOrks
+Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By MindOrks
 
 [![MindOrks](https://img.shields.io/badge/mindorks-opensource-blue.svg)](https://mindorks.com/open-source-projects)
 [![MindOrks Community](https://img.shields.io/badge/join-community-blue.svg)](https://mindorks.com/join-community)
@@ -11,6 +11,23 @@
 
 # This project is under development. Stay-tuned for Updates.
 
+## Building the project
+* Every feature is done in a different branch so that it will be easy to follow.
+* Clone the project, the `master` branch have the latest code.
+* To learn and implement from beginning, switch the branch to `base-project`
+* This App uses the Google API Key for Maps, Directions, and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project and put that in the local.properties:
+```apiKey=YOUR_API_KEY```. Refer this [link](https://developers.google.com/maps/documentation/directions/get-api-key)
+* Start implementing features:
+   * Start with the `base-project` branch
+   * Setup project with basic MVP Architecture.
+   * Implement Permission for fetching current location.
+   * Implement Nearby cabs feature.
+   * Use WebSocket present in simulator module to fetch nearby cabs.
+   * Match your solution with `nearby-cabs` branch.
+   * Implement pickup and drop location.
+   * Match your solution with `pickup-drop-location` branch.
+   * And so on.
+
 ## We will build and learn the following for the App like Uber and Lyft:
 * Create Rider Android App
 * Fetch and show nearby cabs on Google Map
@@ -21,6 +38,8 @@
 * On-going trip UI
 * Trip End
 * Animation like Uber App for Car
+* This project uses the basic MVP Architecture
+* We have simulated the WebSocket API for you.
 
 ## We have simulated the backend environment for you to get the real-work like experience.
 
