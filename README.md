@@ -9,6 +9,22 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 </p>
 <br>
 
+## Real screenshots from this project
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/nearby-cabs.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/pickup-drop-location.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/pickup-drop-location-both-filled.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/request-cab-button.png" width="200">
+</p>
+<br>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/cab-is-booked.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/cab-is-arriving.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/on-trip.png" width="200">
+  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/trip-end.png" width="200">
+</p>
+
 ## Building the project
 * Every feature is done in a different branch so that it will be easy to follow.
 * Clone the project, the `master` branch have the latest code.
@@ -51,22 +67,6 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 * We have simulated the WebSocket API for you.
 
 ## We have simulated the backend environment for you to get the real-work like experience.
-
-## Real screenshots from this project
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/nearby-cabs.png" width="200">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/pickup-drop-location.png" width="200">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/pickup-drop-location-both-filled.png" width="200">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/request-cab-button.png" width="200">
-</p>
-<br>
-<p align="center">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/cab-is-booked.png" width="200">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/cab-is-arriving.png" width="200">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/on-trip.png" width="200">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/trip-end.png" width="200">
-</p>
 
 ## Explore Android Online Tutorials and Courses by MindOrks
 * [Android Tutorial](https://mindorks.com/android-tutorial) - All Free Android Tutorials by MindOrks
