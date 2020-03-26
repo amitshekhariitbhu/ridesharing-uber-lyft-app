@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.Status
@@ -64,6 +65,9 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         dropTextView.setOnClickListener {
             launchLocationAutoCompleteActivity(DROP_REQUEST_CODE)
         }
+        requestCabButton.setOnClickListener {
+
+        }
     }
 
     private fun launchLocationAutoCompleteActivity(requestCode: Int) {
@@ -72,6 +76,12 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
             .build(this)
         startActivityForResult(intent, requestCode)
+    }
+
+    private fun checkAndShowRequestButton() {
+        if (pickUpLatLng !== null && dropLatLng !== null) {
+            requestCabButton.visibility = View.VISIBLE
+        }
     }
 
     private fun moveCamera(latLng: LatLng?) {
@@ -204,10 +214,12 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
                         PICKUP_REQUEST_CODE -> {
                             pickUpTextView.text = place.name
                             pickUpLatLng = place.latLng
+                            checkAndShowRequestButton()
                         }
                         DROP_REQUEST_CODE -> {
                             dropTextView.text = place.name
                             dropLatLng = place.latLng
+                            checkAndShowRequestButton()
                         }
                     }
                 }
