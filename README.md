@@ -15,12 +15,13 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 * Set Pickup and drop location
 * Book a cab
 * Fetch and show driver current location
-* Cab Arrival for pickup like Uber
+* Show pickup and trip path on Map with Animation
+* Cab Arrival for a pickup like Uber
 * On-going trip UI
 * Trip End
-* Animation like Uber App for Car
-* This project uses the basic MVP Architecture
-* We have simulated the WebSocket API for you.
+* Animation like Uber App for Moving Car
+* Just to make it simple. This project uses the basic MVP Architecture.
+* We have simulated the WebSocket API for you 
 
 ## We have simulated the backend environment for you to get the real-work like experience.
 
@@ -51,16 +52,16 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
    * Setup project with basic MVP Architecture.
    * Implement Permission for fetching current location.
    * Implement feature - nearby cabs.
-   * Use WebSocket present in simulator module to fetch nearby cabs.
+   * Use WebSocket present in `simulator` module to fetch the nearby cabs.
    * Match your solution with `nearby-cabs` branch.
    * Implement feature - pickup and drop location.
    * Match your solution with `pickup-drop-location` branch.
    * Implement feature - book a cab.
-   * Implement feature - Show pickup path on map with Animation.
-   * Implement feature - Show current drive location during pickup.
+   * Implement feature - Show pickup path on the map with Animation.
+   * Implement feature - Show current driver location during pickup.
    * Implement feature - Cab is arriving and arrived.
    * Implement feature - Car Animation like Uber.
-   * Implement feature - Show trip path on map with Animation.
+   * Implement feature - Show trip path on the map with Animation.
    * Implement feature - Trip Starts.
    * Implement feature - Show current drive location during trip.
    * Implement feature - Trip on-going.
