@@ -112,6 +112,11 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         pickUpTextView.text = getString(R.string.current_location)
     }
 
+    private fun enableMyLocationOnMap() {
+        googleMap.setPadding(0, ViewUtils.dpToPx(48f), 0, 0)
+        googleMap.isMyLocationEnabled = true
+    }
+
     private fun setUpLocationListener() {
         fusedLocationProviderClient = FusedLocationProviderClient(this)
         // for getting the current location update after every 2 seconds
@@ -125,6 +130,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
                         if (currentLatLng == null) {
                             currentLatLng = LatLng(location.latitude, location.longitude)
                             setCurrentLocationAsPickUp()
+                            enableMyLocationOnMap()
                             moveCamera(currentLatLng)
                             animateCamera(currentLatLng)
                             presenter.requestNearbyCabs(currentLatLng!!)
