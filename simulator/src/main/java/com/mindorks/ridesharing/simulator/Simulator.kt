@@ -110,7 +110,9 @@ object Simulator {
                 if (routeList.isEmpty()) {
                     val jsonObjectFailure = JSONObject()
                     jsonObjectFailure.put("type", "routesNotAvailable")
-                    webSocketListener.onError(jsonObjectFailure.toString())
+                    mainThread.post {
+                        webSocketListener.onError(jsonObjectFailure.toString())
+                    }
                 } else {
                     for (route in routeList) {
                         val path = route.overviewPolyline.decodePath()
@@ -142,7 +144,9 @@ object Simulator {
                 val jsonObjectFailure = JSONObject()
                 jsonObjectFailure.put("type", "directionApiFailed")
                 jsonObjectFailure.put("error", e.message)
-                webSocketListener.onError(jsonObjectFailure.toString())
+                mainThread.post {
+                    webSocketListener.onError(jsonObjectFailure.toString())
+                }
             }
         })
     }
@@ -207,7 +211,9 @@ object Simulator {
                         if (routeList.isEmpty()) {
                             val jsonObjectFailure = JSONObject()
                             jsonObjectFailure.put("type", "routesNotAvailable")
-                            webSocketListener.onError(jsonObjectFailure.toString())
+                            mainThread.post {
+                                webSocketListener.onError(jsonObjectFailure.toString())
+                            }
                         } else {
                             for (route in routeList) {
                                 val path = route.overviewPolyline.decodePath()
@@ -223,7 +229,9 @@ object Simulator {
                         val jsonObjectFailure = JSONObject()
                         jsonObjectFailure.put("type", "directionApiFailed")
                         jsonObjectFailure.put("error", e.message)
-                        webSocketListener.onError(jsonObjectFailure.toString())
+                        mainThread.post {
+                            webSocketListener.onError(jsonObjectFailure.toString())
+                        }
                     }
                 })
 
