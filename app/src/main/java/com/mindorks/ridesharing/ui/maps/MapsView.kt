@@ -6,4 +6,6 @@ interface MapsView {
 
     fun showNearbyCabs(latLngList: List<LatLng>)
 
+    fun informCabBooked()
+
 }

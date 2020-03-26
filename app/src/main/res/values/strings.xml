@@ -8,4 +8,7 @@
     <string name="where_to">Where to?</string>
     <string name="pickup_location">Pickup Location</string>
     <string name="request_cab">Request Cab</string>
+    <string name="your_cab_is_arriving">Your Cab is Arriving</string>
+    <string name="requesting_your_cab">Requesting your cab</string>
+    <string name="your_cab_is_booked">Your Cab is Booked</string>
 </resources>
