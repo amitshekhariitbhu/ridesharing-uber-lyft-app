@@ -24,6 +24,8 @@ Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By
    * Implement Nearby cabs feature.
    * Use WebSocket present in simulator module to fetch nearby cabs.
    * Match your solution with `nearby-cabs` branch.
+   * Implement pickup and drop location.
+   * Match your solution with `pickup-drop-location` branch.
    * And so on.
 
 ## We will build and learn the following for the App like Uber and Lyft:
