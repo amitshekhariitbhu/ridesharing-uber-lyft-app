@@ -15,4 +15,5 @@
     <string name="you_are_on_a_trip">You are on a trip</string>
     <string name="trip_end">Trip End</string>
     <string name="take_next_ride">Take Next Ride</string>
+    <string name="route_not_available_choose_different_locations">Route Not Available: Choose different pickup and drop location</string>
 </resources>

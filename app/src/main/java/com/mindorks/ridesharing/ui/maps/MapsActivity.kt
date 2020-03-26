@@ -50,10 +50,10 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     private var pickUpLatLng: LatLng? = null
     private var dropLatLng: LatLng? = null
     private val nearbyCabMarkerList = arrayListOf<Marker>()
-    private lateinit var destinationMarker: Marker
-    private lateinit var originMarker: Marker
-    private lateinit var greyPolyLine: Polyline
-    private lateinit var blackPolyline: Polyline
+    private var destinationMarker: Marker? = null
+    private var originMarker: Marker? = null
+    private var greyPolyLine: Polyline? = null
+    private var blackPolyline: Polyline? = null
     private var previousLatLngFromServer: LatLng? = null
     private var currentLatLngFromServer: LatLng? = null
     private var movingCabMarker: Marker? = null
@@ -86,8 +86,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
             presenter.requestCab(pickUpLatLng!!, dropLatLng!!)
         }
         nextRideButton.setOnClickListener {
-            finish()
-            startActivity(Intent(this@MapsActivity, MapsActivity::class.java))
+            reset()
         }
     }
 
@@ -102,7 +101,41 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     private fun checkAndShowRequestButton() {
         if (pickUpLatLng !== null && dropLatLng !== null) {
             requestCabButton.visibility = View.VISIBLE
+            requestCabButton.isEnabled = true
         }
+    }
+
+    private fun reset() {
+        statusTextView.visibility = View.GONE
+        nextRideButton.visibility = View.GONE
+        nearbyCabMarkerList.forEach { marker ->
+            marker.remove()
+        }
+        nearbyCabMarkerList.clear()
+        previousLatLngFromServer = null
+        currentLatLngFromServer = null
+        if (currentLatLng != null) {
+            moveCamera(currentLatLng)
+            animateCamera(currentLatLng)
+            setCurrentLocationAsPickUp()
+            presenter.requestNearbyCabs(currentLatLng!!)
+        } else {
+            pickUpTextView.text = ""
+        }
+        pickUpTextView.isEnabled = true
+        dropTextView.isEnabled = true
+        movingCabMarker?.remove()
+        dropLatLng = null
+        dropTextView.text = ""
+        greyPolyLine?.remove()
+        blackPolyline?.remove()
+        originMarker?.remove()
+        destinationMarker?.remove()
+        greyPolyLine = null
+        blackPolyline = null
+        originMarker = null
+        destinationMarker = null
+        movingCabMarker = null
     }
 
     private fun moveCamera(latLng: LatLng?) {
@@ -309,17 +342,17 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         blackPolyline = googleMap.addPolyline(blackPolylineOptions)
 
         originMarker = addOriginDestinationMarkerAndGet(latLngList[0])
-        originMarker.setAnchor(0.5f, 0.5f)
+        originMarker?.setAnchor(0.5f, 0.5f)
         destinationMarker = addOriginDestinationMarkerAndGet(latLngList[latLngList.size - 1])
-        destinationMarker.setAnchor(0.5f, 0.5f)
+        destinationMarker?.setAnchor(0.5f, 0.5f)
 
         val polylineAnimator = ValueAnimator.ofInt(0, 100)
         polylineAnimator.interpolator = LinearInterpolator()
         polylineAnimator.duration = 2000
         polylineAnimator.addUpdateListener { valueAnimator ->
             val percentValue = (valueAnimator.animatedValue as Int)
-            val index = (greyPolyLine.points.size * (percentValue / 100.0f)).toInt()
-            blackPolyline.points = greyPolyLine.points.subList(0, index)
+            val index = (greyPolyLine?.points!!.size * (percentValue / 100.0f)).toInt()
+            blackPolyline?.points = greyPolyLine?.points!!.subList(0, index)
         }
         polylineAnimator.start()
     }
@@ -341,19 +374,21 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
             valueAnimator.duration = 3000
             valueAnimator.interpolator = LinearInterpolator()
             valueAnimator.addUpdateListener { va ->
-                val multiplier = va.animatedFraction
-                val lng =
-                    multiplier * currentLatLngFromServer!!.longitude + (1 - multiplier) * previousLatLngFromServer!!.longitude
-                val lat =
-                    multiplier * currentLatLngFromServer!!.latitude + (1 - multiplier) * previousLatLngFromServer!!.latitude
-                val nextLocation = LatLng(lat, lng)
-                movingCabMarker?.position = nextLocation
-                movingCabMarker?.setAnchor(0.5f, 0.5f)
-                val rotation = MapUtils.getRotation(previousLatLngFromServer!!, nextLocation)
-                if (!rotation.isNaN()) {
-                    movingCabMarker?.rotation = rotation
+                if (currentLatLngFromServer != null && previousLatLngFromServer != null) {
+                    val multiplier = va.animatedFraction
+                    val lng =
+                        multiplier * currentLatLngFromServer!!.longitude + (1 - multiplier) * previousLatLngFromServer!!.longitude
+                    val lat =
+                        multiplier * currentLatLngFromServer!!.latitude + (1 - multiplier) * previousLatLngFromServer!!.latitude
+                    val nextLocation = LatLng(lat, lng)
+                    movingCabMarker?.position = nextLocation
+                    movingCabMarker?.setAnchor(0.5f, 0.5f)
+                    val rotation = MapUtils.getRotation(previousLatLngFromServer!!, nextLocation)
+                    if (!rotation.isNaN()) {
+                        movingCabMarker?.rotation = rotation
+                    }
+                    animateCamera(nextLocation)
                 }
-                animateCamera(nextLocation)
             }
             valueAnimator.start()
         }
@@ -365,10 +400,10 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
 
     override fun informCabArrived() {
         statusTextView.text = getString(R.string.your_cab_has_arrived)
-        greyPolyLine.remove()
-        blackPolyline.remove()
-        originMarker.remove()
-        destinationMarker.remove()
+        greyPolyLine?.remove()
+        blackPolyline?.remove()
+        originMarker?.remove()
+        destinationMarker?.remove()
     }
 
     override fun informTripStart() {
@@ -379,10 +414,28 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     override fun informTripEnd() {
         statusTextView.text = getString(R.string.trip_end)
         nextRideButton.visibility = View.VISIBLE
-        greyPolyLine.remove()
-        blackPolyline.remove()
-        originMarker.remove()
-        destinationMarker.remove()
+        greyPolyLine?.remove()
+        blackPolyline?.remove()
+        originMarker?.remove()
+        destinationMarker?.remove()
+    }
+
+    override fun showRoutesNotAvailableError() {
+        Toast.makeText(
+            this,
+            getString(R.string.route_not_available_choose_different_locations),
+            Toast.LENGTH_LONG
+        ).show()
+        reset()
+    }
+
+    override fun showDirectionApiFailedError(error: String) {
+        Toast.makeText(
+            this,
+            error,
+            Toast.LENGTH_LONG
+        ).show()
+        reset()
     }
 
 }
