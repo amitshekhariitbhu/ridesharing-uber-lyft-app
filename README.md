@@ -15,8 +15,8 @@ Learn to build ride-sharing Android app like Uber, Lyft - Open-Source Project By
 * Every feature is done in a different branch so that it will be easy to follow.
 * Clone the project, the `master` branch have the latest code.
 * To learn and implement from beginning, switch the branch to `base-project`
-* This App uses the Google API Key for Maps, Directions, and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project and put that in the local.properties as below:
-```apiKey=YOUR_API_KEY```
+* This App uses the Google API Key for Maps, Directions, and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project and put that in the local.properties:
+```apiKey=YOUR_API_KEY```. Refer this [link](https://developers.google.com/maps/documentation/directions/get-api-key)
 * Start implementing features:
    * Start with the `base-project` branch
    * Setup project with basic MVP Architecture.
