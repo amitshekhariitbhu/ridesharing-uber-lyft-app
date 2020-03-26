@@ -27,6 +27,7 @@ import com.mindorks.ridesharing.R
 import com.mindorks.ridesharing.data.network.NetworkService
 import com.mindorks.ridesharing.utils.MapUtils
 import com.mindorks.ridesharing.utils.PermissionUtils
+import com.mindorks.ridesharing.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_maps.*
 
 class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
@@ -50,6 +51,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+        ViewUtils.enableTransparentStatusBar(window)
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -105,10 +107,6 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         )
     }
 
-    private fun enableMyLocationOnMap() {
-        googleMap.isMyLocationEnabled = true
-    }
-
     private fun setCurrentLocationAsPickUp() {
         pickUpLatLng = currentLatLng
         pickUpTextView.text = getString(R.string.current_location)
@@ -127,7 +125,6 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
                         if (currentLatLng == null) {
                             currentLatLng = LatLng(location.latitude, location.longitude)
                             setCurrentLocationAsPickUp()
-                            enableMyLocationOnMap()
                             moveCamera(currentLatLng)
                             animateCamera(currentLatLng)
                             presenter.requestNearbyCabs(currentLatLng!!)
