@@ -20,7 +20,7 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 * On-going trip UI
 * Trip End
 * Animation like Uber App for Moving Car
-* Just to make it simple. This project uses the basic MVP Architecture.
+* Just to make it simple. This project uses the basic MVP Architecture for building the Uber and Lyft clone
 * We have simulated the WebSocket API for you 
 
 ## We have simulated the backend environment for you to get the real-work like experience.
@@ -46,7 +46,7 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 * Clone the project, the `master` branch have the latest code.
 * To learn and implement from beginning, switch the branch to `base-project`
 * This App uses the Google API Key for Maps, Directions, and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project and put that in the local.properties:
-```apiKey=YOUR_API_KEY```. Refer this [link](https://developers.google.com/maps/documentation/directions/get-api-key)
+```apiKey=YOUR_API_KEY```. Refer this [link](https://developers.google.com/maps/documentation/directions/get-api-key).
 * Start implementing features:
    * Start with the `base-project` branch
    * Setup project with basic MVP Architecture.
@@ -58,12 +58,12 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
    * Match your solution with `pickup-drop-location` branch.
    * Implement feature - book a cab.
    * Implement feature - Show pickup path on the map with Animation.
-   * Implement feature - Show current driver location during pickup.
+   * Implement feature - Show the current driver location during pickup.
    * Implement feature - Cab is arriving and arrived.
    * Implement feature - Car Animation like Uber.
    * Implement feature - Show trip path on the map with Animation.
    * Implement feature - Trip Starts.
-   * Implement feature - Show current drive location during trip.
+   * Implement feature - Show the current driver location during trip.
    * Implement feature - Trip on-going.
    * Implement feature - Trip Ends.
    * Implement feature - Implement Take Next Ride.
