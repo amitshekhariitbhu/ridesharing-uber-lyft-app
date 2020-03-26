@@ -1,12 +1,15 @@
 package com.mindorks.ridesharing.ui.maps
 
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.Status
@@ -47,6 +50,13 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     private var pickUpLatLng: LatLng? = null
     private var dropLatLng: LatLng? = null
     private val nearbyCabMarkerList = arrayListOf<Marker>()
+    private lateinit var destinationMarker: Marker
+    private lateinit var originMarker: Marker
+    private lateinit var greyPolyLine: Polyline
+    private lateinit var blackPolyline: Polyline
+    private var previousLatLngFromServer: LatLng? = null
+    private var currentLatLngFromServer: LatLng? = null
+    private var movingCabMarker: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +84,10 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
             pickUpTextView.isEnabled = false
             dropTextView.isEnabled = false
             presenter.requestCab(pickUpLatLng!!, dropLatLng!!)
+        }
+        nextRideButton.setOnClickListener {
+            finish()
+            startActivity(Intent(this@MapsActivity, MapsActivity::class.java))
         }
     }
 
@@ -109,6 +123,13 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         return googleMap.addMarker(
             MarkerOptions().position(latLng).flat(true)
                 .icon(BitmapDescriptorFactory.fromBitmap(MapUtils.getCarBitmap(this)))
+        )
+    }
+
+    private fun addOriginDestinationMarkerAndGet(latLng: LatLng): Marker {
+        return googleMap.addMarker(
+            MarkerOptions().position(latLng).flat(true)
+                .icon(BitmapDescriptorFactory.fromBitmap(MapUtils.getDestinationBitmap()))
         )
     }
 
@@ -261,6 +282,107 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         nearbyCabMarkerList.clear()
         requestCabButton.visibility = View.GONE
         statusTextView.text = getString(R.string.your_cab_is_booked)
+    }
+
+    override fun showPath(latLngList: List<LatLng>) {
+        val builder = LatLngBounds.Builder()
+        for (latLng in latLngList) {
+            builder.include(latLng)
+        }
+        val bounds = builder.build()
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 2))
+        val polylineOptions = PolylineOptions()
+        polylineOptions.color(Color.GRAY)
+        polylineOptions.width(5f)
+        polylineOptions.startCap(SquareCap())
+        polylineOptions.endCap(SquareCap())
+        polylineOptions.jointType(JointType.ROUND)
+        polylineOptions.addAll(latLngList)
+        greyPolyLine = googleMap.addPolyline(polylineOptions)
+
+        val blackPolylineOptions = PolylineOptions()
+        blackPolylineOptions.width(5f)
+        blackPolylineOptions.color(Color.BLACK)
+        blackPolylineOptions.startCap(SquareCap())
+        blackPolylineOptions.endCap(SquareCap())
+        blackPolylineOptions.jointType(JointType.ROUND)
+        blackPolyline = googleMap.addPolyline(blackPolylineOptions)
+
+        originMarker = addOriginDestinationMarkerAndGet(latLngList[0])
+        originMarker.setAnchor(0.5f, 0.5f)
+        destinationMarker = addOriginDestinationMarkerAndGet(latLngList[latLngList.size - 1])
+        destinationMarker.setAnchor(0.5f, 0.5f)
+
+        val polylineAnimator = ValueAnimator.ofInt(0, 100)
+        polylineAnimator.interpolator = LinearInterpolator()
+        polylineAnimator.duration = 2000
+        polylineAnimator.addUpdateListener { valueAnimator ->
+            val percentValue = (valueAnimator.animatedValue as Int)
+            val index = (greyPolyLine.points.size * (percentValue / 100.0f)).toInt()
+            blackPolyline.points = greyPolyLine.points.subList(0, index)
+        }
+        polylineAnimator.start()
+    }
+
+    override fun updateCabLocation(latLng: LatLng) {
+        if (movingCabMarker == null) {
+            movingCabMarker = addCarMarkerAndGet(latLng)
+        }
+        if (previousLatLngFromServer == null) {
+            currentLatLngFromServer = latLng
+            previousLatLngFromServer = currentLatLngFromServer
+            movingCabMarker?.position = currentLatLngFromServer
+            movingCabMarker?.setAnchor(0.5f, 0.5f)
+            animateCamera(currentLatLngFromServer)
+        } else {
+            previousLatLngFromServer = currentLatLngFromServer
+            currentLatLngFromServer = latLng
+            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+            valueAnimator.duration = 3000
+            valueAnimator.interpolator = LinearInterpolator()
+            valueAnimator.addUpdateListener { va ->
+                val multiplier = va.animatedFraction
+                val lng =
+                    multiplier * currentLatLngFromServer!!.longitude + (1 - multiplier) * previousLatLngFromServer!!.longitude
+                val lat =
+                    multiplier * currentLatLngFromServer!!.latitude + (1 - multiplier) * previousLatLngFromServer!!.latitude
+                val nextLocation = LatLng(lat, lng)
+                movingCabMarker?.position = nextLocation
+                movingCabMarker?.setAnchor(0.5f, 0.5f)
+                val rotation = MapUtils.getRotation(previousLatLngFromServer!!, nextLocation)
+                if (!rotation.isNaN()) {
+                    movingCabMarker?.rotation = rotation
+                }
+                animateCamera(nextLocation)
+            }
+            valueAnimator.start()
+        }
+    }
+
+    override fun informCabIsArriving() {
+        statusTextView.text = getString(R.string.your_cab_is_arriving)
+    }
+
+    override fun informCabArrived() {
+        statusTextView.text = getString(R.string.your_cab_has_arrived)
+        greyPolyLine.remove()
+        blackPolyline.remove()
+        originMarker.remove()
+        destinationMarker.remove()
+    }
+
+    override fun informTripStart() {
+        statusTextView.text = getString(R.string.you_are_on_a_trip)
+        previousLatLngFromServer = null
+    }
+
+    override fun informTripEnd() {
+        statusTextView.text = getString(R.string.trip_end)
+        nextRideButton.visibility = View.VISIBLE
+        greyPolyLine.remove()
+        blackPolyline.remove()
+        originMarker.remove()
+        destinationMarker.remove()
     }
 
 }

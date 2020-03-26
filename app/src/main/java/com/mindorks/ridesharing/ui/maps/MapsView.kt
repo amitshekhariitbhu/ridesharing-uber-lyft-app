@@ -8,4 +8,16 @@ interface MapsView {
 
     fun informCabBooked()
 
+    fun showPath(latLngList: List<LatLng>)
+
+    fun updateCabLocation(latLng: LatLng)
+
+    fun informCabIsArriving()
+
+    fun informCabArrived()
+
+    fun informTripStart()
+
+    fun informTripEnd()
+
 }
