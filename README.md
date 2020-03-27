@@ -1,5 +1,5 @@
 # Ride-Sharing Uber Lyft Android App
-Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project By MindOrks
+Learn to build a ride-sharing Android Taxi Clone App like Uber, Lyft - Open-Source Project By MindOrks
 
 [![MindOrks](https://img.shields.io/badge/mindorks-opensource-blue.svg)](https://mindorks.com/open-source-projects)
 [![MindOrks Community](https://img.shields.io/badge/join-community-blue.svg)](https://mindorks.com/join-community)
@@ -10,7 +10,7 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 <br>
 
 ## We will build and learn the following for the App like Uber and Lyft:
-* Create Rider Android App
+* Create Rider Android Clone App
 * Fetch and show nearby cabs on Google Map
 * Set Pickup and drop location
 * Book a cab
@@ -75,6 +75,7 @@ Learn to build a ride-sharing Android app like Uber, Lyft - Open-Source Project 
 * [Android Online Course for Beginners](https://bootcamp.mindorks.com/android-training-for-beginners) - This course is for beginners.
 
 ## WebSocket API Reference for this project
+A WebSocket is a persistent connection between a client and server. WebSockets provide a bidirectional, full-duplex communications channel that operates over HTTP through a single TCP/IP socket connection. At its core, the WebSocket protocol facilitates message passing between a client and server. In our case, we have simulated it for you.
 
 * In WebSocket, we have three methods:
    * `connect()`: To connect with the server
