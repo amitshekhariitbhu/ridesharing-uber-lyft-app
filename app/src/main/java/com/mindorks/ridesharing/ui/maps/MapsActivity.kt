@@ -1,6 +1,5 @@
 package com.mindorks.ridesharing.ui.maps
 
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,7 +8,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.Status
@@ -28,6 +26,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mindorks.ridesharing.R
 import com.mindorks.ridesharing.data.network.NetworkService
+import com.mindorks.ridesharing.utils.AnimationUtils
 import com.mindorks.ridesharing.utils.MapUtils
 import com.mindorks.ridesharing.utils.PermissionUtils
 import com.mindorks.ridesharing.utils.ViewUtils
@@ -62,8 +61,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         ViewUtils.enableTransparentStatusBar(window)
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         presenter = MapsPresenter(NetworkService())
         presenter.onAttach(this)
@@ -98,6 +96,67 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         startActivityForResult(intent, requestCode)
     }
 
+    private fun moveCamera(latLng: LatLng?) {
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+    }
+
+    private fun animateCamera(latLng: LatLng?) {
+        val cameraPosition = CameraPosition.Builder().target(latLng).zoom(15.5f).build()
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    }
+
+    private fun addCarMarkerAndGet(latLng: LatLng): Marker {
+        val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(MapUtils.getCarBitmap(this))
+        return googleMap.addMarker(MarkerOptions().position(latLng).flat(true).icon(bitmapDescriptor))
+    }
+
+    private fun addOriginDestinationMarkerAndGet(latLng: LatLng): Marker {
+        val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(MapUtils.getDestinationBitmap())
+        return googleMap.addMarker(MarkerOptions().position(latLng).flat(true).icon(bitmapDescriptor))
+    }
+
+    private fun setCurrentLocationAsPickUp() {
+        pickUpLatLng = currentLatLng
+        pickUpTextView.text = getString(R.string.current_location)
+    }
+
+    private fun enableMyLocationOnMap() {
+        googleMap.setPadding(0, ViewUtils.dpToPx(48f), 0, 0)
+        googleMap.isMyLocationEnabled = true
+    }
+
+    private fun setUpLocationListener() {
+        fusedLocationProviderClient = FusedLocationProviderClient(this)
+        // for getting the current location update after every 2 seconds
+        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                if (currentLatLng == null) {
+                    for (location in locationResult.locations) {
+                        if (currentLatLng == null) {
+                            currentLatLng = LatLng(location.latitude, location.longitude)
+                            setCurrentLocationAsPickUp()
+                            enableMyLocationOnMap()
+                            moveCamera(currentLatLng)
+                            animateCamera(currentLatLng)
+                            presenter.requestNearbyCabs(currentLatLng!!)
+                        }
+                    }
+                }
+                // Few more things we can do here:
+                // For example: Update the location of user on server
+            }
+        }
+        fusedLocationProviderClient?.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
+    }
+
     private fun checkAndShowRequestButton() {
         if (pickUpLatLng !== null && dropLatLng !== null) {
             requestCabButton.visibility = View.VISIBLE
@@ -108,9 +167,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     private fun reset() {
         statusTextView.visibility = View.GONE
         nextRideButton.visibility = View.GONE
-        nearbyCabMarkerList.forEach { marker ->
-            marker.remove()
-        }
+        nearbyCabMarkerList.forEach { it.remove() }
         nearbyCabMarkerList.clear()
         previousLatLngFromServer = null
         currentLatLngFromServer = null
@@ -136,75 +193,6 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         originMarker = null
         destinationMarker = null
         movingCabMarker = null
-    }
-
-    private fun moveCamera(latLng: LatLng?) {
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-    }
-
-    private fun animateCamera(latLng: LatLng?) {
-        googleMap.animateCamera(
-            CameraUpdateFactory.newCameraPosition(
-                CameraPosition.Builder().target(
-                    latLng
-                ).zoom(15.5f).build()
-            )
-        )
-    }
-
-    private fun addCarMarkerAndGet(latLng: LatLng): Marker {
-        return googleMap.addMarker(
-            MarkerOptions().position(latLng).flat(true)
-                .icon(BitmapDescriptorFactory.fromBitmap(MapUtils.getCarBitmap(this)))
-        )
-    }
-
-    private fun addOriginDestinationMarkerAndGet(latLng: LatLng): Marker {
-        return googleMap.addMarker(
-            MarkerOptions().position(latLng).flat(true)
-                .icon(BitmapDescriptorFactory.fromBitmap(MapUtils.getDestinationBitmap()))
-        )
-    }
-
-    private fun setCurrentLocationAsPickUp() {
-        pickUpLatLng = currentLatLng
-        pickUpTextView.text = getString(R.string.current_location)
-    }
-
-    private fun enableMyLocationOnMap() {
-        googleMap.setPadding(0, ViewUtils.dpToPx(48f), 0, 0)
-        googleMap.isMyLocationEnabled = true
-    }
-
-    private fun setUpLocationListener() {
-        fusedLocationProviderClient = FusedLocationProviderClient(this)
-        // for getting the current location update after every 2 seconds
-        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                if (currentLatLng == null) {
-                    for (location in locationResult.locations) {
-                        if (currentLatLng == null) {
-                            currentLatLng = LatLng(location.latitude, location.longitude)
-                            setCurrentLocationAsPickUp()
-                            enableMyLocationOnMap()
-                            moveCamera(currentLatLng)
-                            animateCamera(currentLatLng)
-                            presenter.requestNearbyCabs(currentLatLng!!)
-                        }
-                    }
-                }
-                // Few more things we can do here:
-                // For example: Update the location of user on server
-            }
-        }
-        fusedLocationProviderClient?.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()
-        )
     }
 
     override fun onStart() {
@@ -309,9 +297,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     }
 
     override fun informCabBooked() {
-        nearbyCabMarkerList.forEach { marker ->
-            marker.remove()
-        }
+        nearbyCabMarkerList.forEach { it.remove() }
         nearbyCabMarkerList.clear()
         requestCabButton.visibility = View.GONE
         statusTextView.text = getString(R.string.your_cab_is_booked)
@@ -346,9 +332,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         destinationMarker = addOriginDestinationMarkerAndGet(latLngList[latLngList.size - 1])
         destinationMarker?.setAnchor(0.5f, 0.5f)
 
-        val polylineAnimator = ValueAnimator.ofInt(0, 100)
-        polylineAnimator.interpolator = LinearInterpolator()
-        polylineAnimator.duration = 2000
+        val polylineAnimator = AnimationUtils.polyLineAnimator()
         polylineAnimator.addUpdateListener { valueAnimator ->
             val percentValue = (valueAnimator.animatedValue as Int)
             val index = (greyPolyLine?.points!!.size * (percentValue / 100.0f)).toInt()
@@ -370,17 +354,14 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         } else {
             previousLatLngFromServer = currentLatLngFromServer
             currentLatLngFromServer = latLng
-            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-            valueAnimator.duration = 3000
-            valueAnimator.interpolator = LinearInterpolator()
+            val valueAnimator = AnimationUtils.cabAnimator()
             valueAnimator.addUpdateListener { va ->
                 if (currentLatLngFromServer != null && previousLatLngFromServer != null) {
                     val multiplier = va.animatedFraction
-                    val lng =
+                    val nextLocation = LatLng(
+                        multiplier * currentLatLngFromServer!!.latitude + (1 - multiplier) * previousLatLngFromServer!!.latitude,
                         multiplier * currentLatLngFromServer!!.longitude + (1 - multiplier) * previousLatLngFromServer!!.longitude
-                    val lat =
-                        multiplier * currentLatLngFromServer!!.latitude + (1 - multiplier) * previousLatLngFromServer!!.latitude
-                    val nextLocation = LatLng(lat, lng)
+                    )
                     movingCabMarker?.position = nextLocation
                     movingCabMarker?.setAnchor(0.5f, 0.5f)
                     val rotation = MapUtils.getRotation(previousLatLngFromServer!!, nextLocation)
@@ -421,20 +402,13 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     }
 
     override fun showRoutesNotAvailableError() {
-        Toast.makeText(
-            this,
-            getString(R.string.route_not_available_choose_different_locations),
-            Toast.LENGTH_LONG
-        ).show()
+        val error = getString(R.string.route_not_available_choose_different_locations)
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         reset()
     }
 
     override fun showDirectionApiFailedError(error: String) {
-        Toast.makeText(
-            this,
-            error,
-            Toast.LENGTH_LONG
-        ).show()
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         reset()
     }
 
