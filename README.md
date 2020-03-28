@@ -47,8 +47,12 @@ Learn to build a ride-sharing Android Taxi Clone App like Uber, Lyft - Open-Sour
 * Every feature is done in a different branch so that it will be easy to follow.
 * Clone the project, the `master` branch has the latest code.
 * To learn and implement from the beginning, switch the branch to `base-project`
-* This App uses the Google API Key for Maps, Directions, and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project and put that in the local.properties:
-```apiKey=YOUR_API_KEY```. Refer this [link](https://developers.google.com/maps/documentation/directions/get-api-key).
+* This App uses the Google API Key for Maps, Directions, and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project. Refer this [link](https://developers.google.com/maps/documentation/directions/get-api-key). And put that key in the local.properties file in your project:
+Your local.properties will like below:
+```
+sdk.dir=PATH_TO_ANDROID_SDK_ON_YOUR_LOCAL_MACHINE    
+apiKey=YOUR_API_KEY
+```
 * Start implementing features:
    * Start with the `base-project` branch
    * Setup project with basic MVP Architecture.
