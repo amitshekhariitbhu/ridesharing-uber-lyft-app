@@ -25,6 +25,8 @@ Learn to build a ride-sharing Android Taxi Clone App like Uber, Lyft - Open-Sour
 
 ## We have simulated the backend environment for you to get the real-work like experience.
 
+## Video showing the App demo with Car Animation, [check here](https://www.youtube.com/watch?v=xn3BOf8uOgc)
+
 ## Screenshots from this project
 
 <p align="center">
