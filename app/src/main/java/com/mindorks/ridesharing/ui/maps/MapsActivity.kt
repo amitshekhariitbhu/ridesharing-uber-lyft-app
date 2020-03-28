@@ -313,18 +313,12 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         val polylineOptions = PolylineOptions()
         polylineOptions.color(Color.GRAY)
         polylineOptions.width(5f)
-        polylineOptions.startCap(SquareCap())
-        polylineOptions.endCap(SquareCap())
-        polylineOptions.jointType(JointType.ROUND)
         polylineOptions.addAll(latLngList)
         greyPolyLine = googleMap.addPolyline(polylineOptions)
 
         val blackPolylineOptions = PolylineOptions()
         blackPolylineOptions.width(5f)
         blackPolylineOptions.color(Color.BLACK)
-        blackPolylineOptions.startCap(SquareCap())
-        blackPolylineOptions.endCap(SquareCap())
-        blackPolylineOptions.jointType(JointType.ROUND)
         blackPolyline = googleMap.addPolyline(blackPolylineOptions)
 
         originMarker = addOriginDestinationMarkerAndGet(latLngList[0])
