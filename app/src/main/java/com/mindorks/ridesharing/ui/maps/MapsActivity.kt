@@ -181,13 +181,13 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         }
         pickUpTextView.isEnabled = true
         dropTextView.isEnabled = true
-        movingCabMarker?.remove()
-        dropLatLng = null
         dropTextView.text = ""
+        movingCabMarker?.remove()
         greyPolyLine?.remove()
         blackPolyline?.remove()
         originMarker?.remove()
         destinationMarker?.remove()
+        dropLatLng = null
         greyPolyLine = null
         blackPolyline = null
         originMarker = null
