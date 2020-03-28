@@ -9,6 +9,9 @@ Learn to build a ride-sharing Android Taxi Clone App like Uber, Lyft - Open-Sour
 </p>
 <br>
 
+## About this Open Source Project
+This open-source project is for you(community). Our Team at [MindOrks](https://mindorks.com) has taken this initiative to promote Android Learning in the best possible way. We are determined to provide quality content for everyone. Let's do it together by learning from this project.
+
 ## We will build and learn the following for the App like Uber and Lyft:
 * Create Rider Android Clone App
 * Fetch and show nearby cabs on Google Map
@@ -56,7 +59,9 @@ apiKey=YOUR_API_KEY
 * Start implementing features:
    * Start with the `base-project` branch
    * Setup project with basic MVP Architecture.
+        * Resource to Learn: [Basic Android MVP Introduction](https://mindorks.com/course/android-mvp-introduction)
    * Implement Permission for fetching current location.
+        * Resource to Learn: [Using Fused Location API To Fetch Current Location](https://blog.mindorks.com/using-gps-location-manager-in-android-android-tutorial)
    * Implement feature - nearby cabs.
    * Use WebSocket present in `simulator` module to fetch the nearby cabs.
    * Match your solution with `nearby-cabs` branch.
@@ -75,10 +80,10 @@ apiKey=YOUR_API_KEY
    * Implement feature - Implement Take Next Ride.
    * Match your solution with `book-complete-trip` branch.
 
-## Explore Android Online Tutorials and Courses by MindOrks
+## Explore Android Online Tutorials and Courses To Learn More by MindOrks
 * [Android Tutorial](https://mindorks.com/android-tutorial) - All Free Android Tutorials by MindOrks
-* [Android Online Course for Professionals](https://bootcamp.mindorks.com) - In this online course, you’ll learn best practices for Android and mobile development. By the end of the online course, you will have the skills you need to become a professional Android Developer.
-* [Android Online Course for Beginners](https://bootcamp.mindorks.com/android-training-for-beginners) - This course is for beginners.
+* [Android Online Course for Professionals](https://bootcamp.mindorks.com) - In this online course, you’ll learn the Dagger, Kotlin, RxJava, MVVM Architecture, Architecture Components, Jetpack, LiveData, ViewModel, Room Database, Database Design, Multithreading, Memory Management, Networking, Caching, How Glide works, Unit Testing, and the best practices for Android Development. By the end of this online course, you will have all the skills you need to become a professional Android Developer.
+* [Android Online Course for Beginners](https://bootcamp.mindorks.com/android-training-for-beginners) - This course is for beginners for those who want to get started with Android Development.
 
 ## WebSocket API Reference for this project
 A WebSocket is a persistent connection between a client and server. WebSockets provide a bidirectional, full-duplex communications channel that operates over HTTP through a single TCP/IP socket connection. At its core, the WebSocket protocol facilitates message passing between a client and server. In our case, we have simulated it for you.
