@@ -69,6 +69,7 @@ apiKey=YOUR_API_KEY
    * Match your solution with `pickup-drop-location` branch.
    * Implement feature - book a cab.
    * Implement feature - Show pickup path on the map with Animation.
+        * Resource to Learn: [Uber-Car-Animation-Android](https://github.com/MindorksOpenSource/Uber-Car-Animation-Android)
    * Implement feature - Show the current driver location during pickup.
    * Implement feature - Cab is arriving and arrived.
    * Implement feature - Car Animation like Uber.
@@ -83,7 +84,7 @@ apiKey=YOUR_API_KEY
 ## Explore Android Online Tutorials and Courses To Learn More by MindOrks
 * [Android Tutorial](https://mindorks.com/android-tutorial) - All Free Android Tutorials by MindOrks
 * [Android Online Course for Professionals](https://bootcamp.mindorks.com) - In this online course, you’ll learn the Dagger, Kotlin, RxJava, MVVM Architecture, Architecture Components, Jetpack, LiveData, ViewModel, Room Database, Database Design, Multithreading, Memory Management, Networking, Caching, How Glide works, Unit Testing, and the best practices for Android Development. By the end of this online course, you will have all the skills you need to become a professional Android Developer.
-* [Android Online Course for Beginners](https://bootcamp.mindorks.com/android-training-for-beginners) - This course is for beginners for those who want to get started with Android Development.
+* [Android Online Course for Beginners](https://bootcamp.mindorks.com/android-training-for-beginners) - This course is for beginners for those who want to get started with Android Development. In this course, you will build two apps: TodoNotes and Ride-Sharing Uber Android App.
 
 ## WebSocket API Reference for this project
 A WebSocket is a persistent connection between a client and server. WebSockets provide a bidirectional, full-duplex communications channel that operates over HTTP through a single TCP/IP socket connection. At its core, the WebSocket protocol facilitates message passing between a client and server. In our case, we have simulated it for you.
