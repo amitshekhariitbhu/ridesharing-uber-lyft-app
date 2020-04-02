@@ -69,7 +69,8 @@ apiKey=YOUR_API_KEY
    * Match your solution with `pickup-drop-location` branch.
    * Implement feature - book a cab.
    * Implement feature - Show pickup path on the map with Animation.
-        * Resource to Learn: [Uber-Car-Animation-Android](https://github.com/MindorksOpenSource/Uber-Car-Animation-Android)
+        * Resource to Learn - Blog: [How to Add Uber Car Animation in Android App?](https://blog.mindorks.com/how-to-add-uber-car-animation-in-android-app)
+        * Resource to Learn - Project: [Uber-Car-Animation-Android](https://github.com/MindorksOpenSource/Uber-Car-Animation-Android)
    * Implement feature - Show the current driver location during pickup.
    * Implement feature - Cab is arriving and arrived.
    * Implement feature - Car Animation like Uber.
