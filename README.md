@@ -31,7 +31,7 @@ This open-source project is for you(community). Our Team at [MindOrks](https://m
 ## Video showing the App demo with Car Animation, [check here](https://www.youtube.com/watch?v=xn3BOf8uOgc)
 <a href="https://www.youtube.com/watch?v=xn3BOf8uOgc" target="_blank">
 <p align="center">
-    <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/video-app-demo.jpg">
+    <img src="https://raw.githubusercontent.com/MindorksOpenSource/ridesharing-uber-lyft-app/master/assets/video-app-demo.png">
 </p>
 </a>
 
