@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ridesharing-uber-lyft-app-1"
+rootProject.name = "ridesharing-uber-lyft-app"
 include(":app")
 include(":simulator")
