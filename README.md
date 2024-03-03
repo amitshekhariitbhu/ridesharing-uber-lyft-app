@@ -53,9 +53,9 @@ You can connect with me on:
 </p>
 
 ## Building the project
-* Every feature is done in a different branch so that it will be easy to follow.
+* Every feature is easy to follow.
 * Clone the project, the `master` branch has the latest code.
-* To learn and implement from the beginning, switch the branch to `base-project`
+* To learn and implement from the beginning, start with a new project.
 * This App uses the Google API Key for Maps, Directions, and Places. Get the API key from the Google Cloud Developer console after enabling the Maps, Directions and Places features for your project. Refer this [link](https://developers.google.com/maps/documentation/directions/get-api-key). And put that key in the local.properties file in your project:
 Your local.properties will like below:
 ```
@@ -63,14 +63,12 @@ sdk.dir=PATH_TO_ANDROID_SDK_ON_YOUR_LOCAL_MACHINE
 apiKey=YOUR_API_KEY
 ```
 * Start implementing features:
-   * Start with the `base-project` branch
+   * Start with a new project.
    * Setup project with basic MVP Architecture.
    * Implement Permission for fetching current location.
    * Implement feature - nearby cabs.
    * Use WebSocket present in `simulator` module to fetch the nearby cabs.
-   * Match your solution with `nearby-cabs` branch.
    * Implement feature - pickup and drop location.
-   * Match your solution with `pickup-drop-location` branch.
    * Implement feature - book a cab.
    * Implement feature - Show pickup path on the map with Animation.
    * Implement feature - Show the current driver location during pickup.
@@ -82,7 +80,6 @@ apiKey=YOUR_API_KEY
    * Implement feature - Trip on-going.
    * Implement feature - Trip Ends.
    * Implement feature - Implement Take Next Ride.
-   * Match your solution with `book-complete-trip` branch.
 
 ## WebSocket API Reference for this project
 A WebSocket is a persistent connection between a client and server. WebSockets provide a bidirectional, full-duplex communications channel that operates over HTTP through a single TCP/IP socket connection. At its core, the WebSocket protocol facilitates message passing between a client and server. In our case, we have simulated it for you.
