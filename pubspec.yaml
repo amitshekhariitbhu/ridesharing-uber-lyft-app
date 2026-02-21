@@ -1,0 +1,44 @@
+name: ride_share_app_with_flutter
+description: "A new Flutter project."
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.4 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  google_maps_flutter: ^2.0.6
+  flutter_google_places: ^0.3.0
+  google_maps_webservice: ^0.0.19
+  geolocator: ^8.2.0
+  geocoding: ^2.0.0
+  location: ^4.3.0
+  permission_handler: ^8.1.6
+  cupertino_icons: ^1.0.6
+  flutter_bloc: ^8.1.6
+  percent_indicator: ^4.0.1
+  flutter_dotenv: ^5.0.2
+  flutter_typeahead: ^4.0.0
+ 
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.9
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/avatar/
+    - assets/onboarding/
+    - assets/welcome/
+    - assets/.env
+    - assets/icons/car_icon.png
+  
