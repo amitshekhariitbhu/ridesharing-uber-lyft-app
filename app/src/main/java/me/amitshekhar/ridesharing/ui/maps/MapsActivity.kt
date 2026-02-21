@@ -1,5 +1,6 @@
 package me.amitshekhar.ridesharing.ui.maps
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -8,12 +9,16 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -38,7 +43,7 @@ import me.amitshekhar.ridesharing.utils.MapUtils
 import me.amitshekhar.ridesharing.utils.PermissionUtils
 import me.amitshekhar.ridesharing.utils.ViewUtils
 
-class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), MapsPresenter, OnMapReadyCallback {
 
     companion object {
         private const val TAG = "MapsActivity"
@@ -48,7 +53,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
     }
 
     private lateinit var binding: ActivityMapsBinding
-    private lateinit var presenter: MapsPresenter
+    private lateinit var presenter: MapsView
     private lateinit var googleMap: GoogleMap
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private lateinit var locationCallback: LocationCallback
@@ -71,7 +76,7 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
         ViewUtils.enableTransparentStatusBar(window)
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        presenter = MapsPresenter(NetworkService())
+        presenter = MapsView(NetworkService())
         presenter.onAttach(this)
         setUpClickListener()
     }
@@ -134,14 +139,33 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
 
     private fun enableMyLocationOnMap() {
         googleMap.setPadding(0, ViewUtils.dpToPx(48f), 0, 0)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         googleMap.isMyLocationEnabled = true
     }
 
     private fun setUpLocationListener() {
-        fusedLocationProviderClient = FusedLocationProviderClient(this)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
         // for getting the current location update after every 2 seconds
-        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
+            .setMinUpdateIntervalMillis(2000)
+            .build()
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -161,6 +185,23 @@ class MapsActivity : AppCompatActivity(), MapsView, OnMapReadyCallback {
                 // Few more things we can do here:
                 // For example: Update the location of user on server
             }
+        }
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
         }
         fusedLocationProviderClient?.requestLocationUpdates(
             locationRequest,
